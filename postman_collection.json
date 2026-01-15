@@ -1,0 +1,469 @@
+{
+	"info": {
+		"_postman_id": "visa-api-collection",
+		"name": "Visa API - Collection Complète",
+		"description": "Collection Postman pour l'API Visa/eVisa/ETA\n\nBase URL: http://localhost:3007\n\nPour les endpoints admin, ajouter le header:\nx-api-key: <votre ADMIN_API_KEY>",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Health Check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/health",
+					"host": ["{{base_url}}"],
+					"path": ["health"]
+				},
+				"description": "Vérifie que l'API et la base de données sont connectées"
+			}
+		},
+		{
+			"name": "Countries",
+			"item": [
+				{
+					"name": "GET - Liste des pays",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v1/countries?search=&continent=&popular=1&limit=10&offset=0",
+							"host": ["{{base_url}}"],
+							"path": ["v1", "countries"],
+							"query": [
+								{
+									"key": "search",
+									"value": "",
+									"description": "Recherche par nom ou ISO2"
+								},
+								{
+									"key": "continent",
+									"value": "",
+									"description": "Filtrer par continent"
+								},
+								{
+									"key": "popular",
+									"value": "1",
+									"description": "0 ou 1 pour destinations populaires"
+								},
+								{
+									"key": "limit",
+									"value": "10",
+									"description": "Nombre de résultats"
+								},
+								{
+									"key": "offset",
+									"value": "0",
+									"description": "Pagination"
+								}
+							]
+						},
+						"description": "Liste tous les pays avec filtres optionnels"
+					}
+				},
+				{
+					"name": "GET - Détails pays par ISO2",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v1/countries/CA",
+							"host": ["{{base_url}}"],
+							"path": ["v1", "countries", "CA"]
+						},
+						"description": "Récupère les détails d'un pays par son code ISO2"
+					}
+				}
+			]
+		},
+		{
+			"name": "Nationalities",
+			"item": [
+				{
+					"name": "GET - Liste des nationalités",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v1/nationalities?search=&limit=10&offset=0",
+							"host": ["{{base_url}}"],
+							"path": ["v1", "nationalities"],
+							"query": [
+								{
+									"key": "search",
+									"value": "",
+									"description": "Recherche par nom ou ISO2"
+								},
+								{
+									"key": "limit",
+									"value": "10",
+									"description": "Nombre de résultats"
+								},
+								{
+									"key": "offset",
+									"value": "0",
+									"description": "Pagination"
+								}
+							]
+						},
+						"description": "Liste toutes les nationalités"
+					}
+				}
+			]
+		},
+		{
+			"name": "Requirements",
+			"item": [
+				{
+					"name": "GET - Requirements agrégés (principal)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v1/requirements?nationality=FR&destination=CA&purpose=tourism&lang=fr",
+							"host": ["{{base_url}}"],
+							"path": ["v1", "requirements"],
+							"query": [
+								{
+									"key": "nationality",
+									"value": "FR",
+									"description": "Nom ou ISO2 de la nationalité (ex: FR ou France)"
+								},
+								{
+									"key": "destination",
+									"value": "CA",
+									"description": "Nom ou ISO2 du pays de destination (ex: CA ou Canada)"
+								},
+								{
+									"key": "purpose",
+									"value": "tourism",
+									"description": "But du voyage (défaut: tourism)"
+								},
+								{
+									"key": "lang",
+									"value": "fr",
+									"description": "Langue pour le guide (défaut: fr)"
+								}
+							]
+						},
+						"description": "Endpoint principal - Retourne toutes les informations agrégées (documents, vaccins, guide, etc.)"
+					}
+				},
+				{
+					"name": "GET - Entry Profile par ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v1/entry-profiles/1",
+							"host": ["{{base_url}}"],
+							"path": ["v1", "entry-profiles", "1"]
+						},
+						"description": "Récupère un profil d'entrée complet par son ID"
+					}
+				},
+				{
+					"name": "GET - Documents d'un profil",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v1/entry-profiles/1/documents",
+							"host": ["{{base_url}}"],
+							"path": ["v1", "entry-profiles", "1", "documents"]
+						},
+						"description": "Récupère uniquement les documents d'un profil"
+					}
+				},
+				{
+					"name": "GET - Travel Requirements d'un profil",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v1/entry-profiles/1/travel-requirements",
+							"host": ["{{base_url}}"],
+							"path": ["v1", "entry-profiles", "1", "travel-requirements"]
+						},
+						"description": "Récupère uniquement les exigences de voyage d'un profil"
+					}
+				},
+				{
+					"name": "GET - Health Requirements d'un profil",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v1/entry-profiles/1/health",
+							"host": ["{{base_url}}"],
+							"path": ["v1", "entry-profiles", "1", "health"]
+						},
+						"description": "Récupère uniquement les exigences sanitaires d'un profil"
+					}
+				},
+				{
+					"name": "GET - Guide d'un pays",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v1/countries/CA/guide?lang=fr",
+							"host": ["{{base_url}}"],
+							"path": ["v1", "countries", "CA", "guide"],
+							"query": [
+								{
+									"key": "lang",
+									"value": "fr",
+									"description": "Langue du guide"
+								}
+							]
+						},
+						"description": "Récupère le guide touristique d'un pays"
+					}
+				}
+			]
+		},
+		{
+			"name": "Admin (protégé par API key)",
+			"item": [
+				{
+					"name": "Nationalities",
+					"item": [
+						{
+							"name": "POST - Créer/Mettre à jour nationalité",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "x-api-key",
+										"value": "{{admin_api_key}}",
+										"description": "Clé API admin"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name_fr\": \"France\",\n  \"iso2\": \"FR\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/v1/admin/nationalities",
+									"host": ["{{base_url}}"],
+									"path": ["v1", "admin", "nationalities"]
+								},
+								"description": "Crée ou met à jour une nationalité (upsert par name_fr)"
+							}
+						}
+					]
+				},
+				{
+					"name": "Countries",
+					"item": [
+						{
+							"name": "POST - Créer/Mettre à jour pays",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "x-api-key",
+										"value": "{{admin_api_key}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name_fr\": \"Canada\",\n  \"iso2\": \"CA\",\n  \"continent\": \"Amérique du Nord\",\n  \"popular_destination\": true,\n  \"image_url\": \"https://images.unsplash.com/photo-1448375240586-882707db888b?ixlib=rb-4.0.3\",\n  \"processed_visas_count\": 0\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/v1/admin/countries",
+									"host": ["{{base_url}}"],
+									"path": ["v1", "admin", "countries"]
+								},
+								"description": "Crée ou met à jour un pays (upsert par iso2)"
+							}
+						},
+						{
+							"name": "POST - Ajouter/Mettre à jour portail officiel",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "x-api-key",
+										"value": "{{admin_api_key}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"url\": \"https://www.canada.ca/en/immigration-refugees-citizenship/services/visit-canada/eta/apply.html\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/v1/admin/countries/CA/official-portal",
+									"host": ["{{base_url}}"],
+									"path": ["v1", "admin", "countries", "CA", "official-portal"]
+								},
+								"description": "Ajoute ou met à jour le portail officiel d'un pays"
+							}
+						},
+						{
+							"name": "PUT - Mettre à jour guide pays",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "x-api-key",
+										"value": "{{admin_api_key}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"lang\": \"fr\",\n  \"guide_text\": \"Le Canada accueille les voyageurs français sans visa pour des séjours touristiques, à condition d'obtenir une autorisation de voyage électronique (eTA)...\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/v1/admin/countries/CA/guide",
+									"host": ["{{base_url}}"],
+									"path": ["v1", "admin", "countries", "CA", "guide"]
+								},
+								"description": "Met à jour le guide touristique d'un pays"
+							}
+						}
+					]
+				},
+				{
+					"name": "Entry Profiles",
+					"item": [
+						{
+							"name": "PUT - Créer/Mettre à jour profil d'entrée",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "x-api-key",
+										"value": "{{admin_api_key}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"nationality_id\": 1,\n  \"destination_country_id\": 66,\n  \"purpose\": \"tourism\",\n  \"last_checked\": \"2026-01-05\",\n  \"source_confidence\": 0.75,\n  \"needs_manual_review\": false,\n  \"llm_model\": \"gpt-5-nano\",\n  \"llm_prompt_version\": \"v1\",\n  \"llm_sources_json\": \"[{\\\"url\\\":\\\"https://www.canada.ca/...\\\",\\\"title\\\":\\\"\\\"}]\",\n  \"llm_raw_json\": \"{}\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/v1/admin/entry-profiles",
+									"host": ["{{base_url}}"],
+									"path": ["v1", "admin", "entry-profiles"]
+								},
+								"description": "Crée ou met à jour un profil d'entrée (upsert par nationality_id, destination_country_id, purpose)"
+							}
+						},
+						{
+							"name": "PUT - Remplacer documents d'un profil",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "x-api-key",
+										"value": "{{admin_api_key}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"documents\": [\n    {\n      \"nom_document\": \"Electronic Travel Authorization (eTA)\",\n      \"type_document\": \"eta\",\n      \"required\": true,\n      \"duree_validite_text\": \"5 ans ou expiry of passport, whichever comes first\",\n      \"duree_validite_days\": null,\n      \"nombre_entrees\": \"multiple\",\n      \"duree_sejour_max_text\": \"jusqu'à 6 mois par séjour\",\n      \"duree_sejour_max_days\": 183,\n      \"prix_montant\": 7,\n      \"prix_devise\": \"CAD\",\n      \"prix_montant_eur\": null,\n      \"prix_libelle\": \"Frais eTA\",\n      \"temps_obtention_visa\": \"La plupart des demandes sont approuvées en minutes\",\n      \"application_url\": \"https://www.canada.ca/en/immigration-refugees-citizenship/services/visit-canada/eta.html\",\n      \"source_officielle\": \"https://www.canada.ca/en/immigration-refugees-citizenship/services/visit-canada/eta.html\",\n      \"confidence\": 0.8\n    },\n    {\n      \"nom_document\": \"passport (nationalité française)\",\n      \"type_document\": \"passport_only\",\n      \"required\": true,\n      \"duree_validite_text\": \"Valide pour la durée du passeport\",\n      \"duree_validite_days\": null,\n      \"nombre_entrees\": \"unknown\",\n      \"duree_sejour_max_text\": \"6 mois par entrée\",\n      \"duree_sejour_max_days\": 183,\n      \"prix_montant\": 0,\n      \"prix_devise\": \"CAD\",\n      \"prix_montant_eur\": null,\n      \"prix_libelle\": \"Gratuit pour le passeport\",\n      \"temps_obtention_visa\": \"\",\n      \"application_url\": \"\",\n      \"source_officielle\": \"\",\n      \"confidence\": 0.0\n    }\n  ]\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/v1/admin/entry-profiles/1/documents",
+									"host": ["{{base_url}}"],
+									"path": ["v1", "admin", "entry-profiles", "1", "documents"]
+								},
+								"description": "Remplace tous les documents d'un profil (transaction: DELETE puis INSERT)"
+							}
+						},
+						{
+							"name": "PUT - Mettre à jour travel requirements",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "x-api-key",
+										"value": "{{admin_api_key}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"travel_authorization_required\": false,\n  \"travel_authorization_name\": null,\n  \"travel_authorization_url\": null,\n  \"arrival_form_required\": true,\n  \"arrival_form_name\": \"ArriveCAN (pré-arrivée)\",\n  \"arrival_form_url\": \"\",\n  \"other_requirements_json\": null\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/v1/admin/entry-profiles/1/travel-requirements",
+									"host": ["{{base_url}}"],
+									"path": ["v1", "admin", "entry-profiles", "1", "travel-requirements"]
+								},
+								"description": "Met à jour les exigences de voyage d'un profil"
+							}
+						},
+						{
+							"name": "PUT - Mettre à jour health requirements",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "x-api-key",
+										"value": "{{admin_api_key}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"vaccines_required_json\": \"[\\\"Aucune vaccination obligatoire spécifique pour le tourisme\\\"]\",\n  \"vaccines_recommended_json\": \"[]\",\n  \"notes\": null\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/v1/admin/entry-profiles/1/health",
+									"host": ["{{base_url}}"],
+									"path": ["v1", "admin", "entry-profiles", "1", "health"]
+								},
+								"description": "Met à jour les exigences sanitaires d'un profil"
+							}
+						}
+					]
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3007",
+			"type": "string"
+		},
+		{
+			"key": "admin_api_key",
+			"value": "your-secret-admin-api-key-change-in-production",
+			"type": "string"
+		}
+	]
+}
