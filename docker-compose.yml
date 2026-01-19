@@ -5,18 +5,14 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    env_file:
+      - .env
     ports:
       - "${PORT:-3007}:3007"
     environment:
       - NODE_ENV=production
-      - PORT=3000
+      - PORT=3007
       - DB_HOST=mariadb
-      - DB_PORT=3306
-      - DB_USER=${DB_USER:-root}
-      - DB_PASSWORD=${DB_PASSWORD:-password}
-      - DB_NAME=${DB_NAME:-visa_db}
-      - CORS_ORIGINS=${CORS_ORIGINS:-*}
-      - ADMIN_API_KEY=${ADMIN_API_KEY:-change-me}
     depends_on:
       - mariadb
     restart: unless-stopped
@@ -25,11 +21,13 @@ services:
 
   mariadb:
     image: mariadb:10.11
+    env_file:
+      - .env
     environment:
-      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD:-password}
-      - MYSQL_DATABASE=${DB_NAME:-visa_db}
-      - MYSQL_USER=${DB_USER:-root}
-      - MYSQL_PASSWORD=${DB_PASSWORD:-password}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
     ports:
       - "3306:3306"
     volumes:
