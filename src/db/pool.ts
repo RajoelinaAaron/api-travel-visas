@@ -1,5 +1,4 @@
 import mysql from 'mysql2/promise';
-import { FastifyInstance } from 'fastify';
 
 export interface DbConfig {
   host: string;

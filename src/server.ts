@@ -1,6 +1,6 @@
 import Fastify from 'fastify';
 import { config } from 'dotenv';
-import { createPool, closePool } from './db/pool';
+import { createPool } from './db/pool';
 import { corsPlugin } from './plugins/cors';
 import { swaggerPlugin } from './plugins/swagger';
 import { helmetPlugin } from './plugins/helmet';
