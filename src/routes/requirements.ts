@@ -9,6 +9,7 @@ import {
   getCountryGuide,
 } from '../db/queries';
 import { SourceItem } from '../types';
+import { ZodError } from 'zod';
 
 export const requirementsRoutes: FastifyPluginAsync = async (fastify) => {
   // GET /v1/requirements
@@ -61,12 +62,17 @@ export const requirementsRoutes: FastifyPluginAsync = async (fastify) => {
         );
         return reply.send(result);
       } catch (error) {
+        if (error instanceof ZodError) {
+          return reply.code(400).send({ error: error.message });
+        }
         if (error instanceof Error) {
           if (error.message.includes('not found')) {
             return reply.code(404).send({ error: error.message });
           }
-          return reply.code(400).send({ error: error.message });
+          fastify.log.error({ err: error }, 'requirements fetch failed');
+          return reply.code(500).send({ error: 'Internal server error' });
         }
+        fastify.log.error({ err: error }, 'requirements fetch failed');
         return reply.code(500).send({ error: 'Internal server error' });
       }
     }

@@ -3,6 +3,8 @@ import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
 
 export const swaggerPlugin: FastifyPluginAsync = async (fastify) => {
+  const publicBaseUrl = process.env.PUBLIC_BASE_URL || `http://localhost:${process.env.PORT || 3000}`;
+
   await fastify.register(swagger, {
     openapi: {
       openapi: '3.0.0',
@@ -13,8 +15,8 @@ export const swaggerPlugin: FastifyPluginAsync = async (fastify) => {
       },
       servers: [
         {
-          url: `http://localhost:${process.env.PORT || 3000}`,
-          description: 'Development server',
+          url: publicBaseUrl,
+          description: process.env.PUBLIC_BASE_URL ? 'Public server' : 'Development server',
         },
       ],
       tags: [

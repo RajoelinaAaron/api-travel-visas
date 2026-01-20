@@ -70,10 +70,14 @@ async function buildServer() {
   await fastify.register(nationalitiesRoutes, { prefix: '/api/nationalities' });
   await fastify.register(requirementsRoutes, { prefix: '/api' });
   await fastify.register(requirementsRoutes, { prefix: '/api/v1' });
+  await fastify.register(countriesRoutes, { prefix: '/api/v1/countries' });
+  await fastify.register(nationalitiesRoutes, { prefix: '/api/v1/nationalities' });
   
   // Register admin routes with auth
   await fastify.register(adminAuthPlugin, { prefix: '/v1/admin' });
   await fastify.register(adminRoutes, { prefix: '/v1/admin' });
+  await fastify.register(adminAuthPlugin, { prefix: '/api/v1/admin' });
+  await fastify.register(adminRoutes, { prefix: '/api/v1/admin' });
 
   return fastify;
 }
