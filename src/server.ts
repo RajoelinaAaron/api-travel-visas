@@ -69,6 +69,7 @@ async function buildServer() {
   await fastify.register(countriesRoutes, { prefix: '/api/countries' });
   await fastify.register(nationalitiesRoutes, { prefix: '/api/nationalities' });
   await fastify.register(requirementsRoutes, { prefix: '/api' });
+  await fastify.register(requirementsRoutes, { prefix: '/api/v1' });
   
   // Register admin routes with auth
   await fastify.register(adminAuthPlugin, { prefix: '/v1/admin' });
