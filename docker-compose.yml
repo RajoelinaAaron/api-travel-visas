@@ -12,6 +12,8 @@ services:
       - NODE_ENV=production
       - PORT=3007
       - DB_HOST=host.docker.internal
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     restart: unless-stopped
     networks:
       - visa-network
