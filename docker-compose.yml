@@ -1,5 +1,4 @@
 version: '2.2'
-
 services:
   api:
     build:
@@ -12,39 +11,12 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=3007
-      - DB_HOST=mariadb
-    depends_on:
-      - mariadb
+      - DB_HOST=host.docker.internal
     restart: unless-stopped
     networks:
       - visa-network
-
-  mariadb:
-    image: mariadb:10.11
-    env_file:
-      - .env
-    environment:
-      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
-      - MYSQL_DATABASE=${DB_NAME}
-      - MYSQL_USER=${DB_USER}
-      - MYSQL_PASSWORD=${DB_PASSWORD}
-    ports:
-      - "3306:3306"
-    volumes:
-      - mariadb_data:/var/lib/mysql
-    restart: unless-stopped
-    networks:
-      - visa-network
-    healthcheck:
-      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
 networks:
   visa-network:
     driver: bridge
-
-volumes:
-  mariadb_data:
 
