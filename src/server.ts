@@ -64,6 +64,11 @@ async function buildServer() {
   await fastify.register(countriesRoutes, { prefix: '/v1/countries' });
   await fastify.register(nationalitiesRoutes, { prefix: '/v1/nationalities' });
   await fastify.register(requirementsRoutes, { prefix: '/v1' });
+
+  // Backward-compatible /api aliases
+  await fastify.register(countriesRoutes, { prefix: '/api/countries' });
+  await fastify.register(nationalitiesRoutes, { prefix: '/api/nationalities' });
+  await fastify.register(requirementsRoutes, { prefix: '/api' });
   
   // Register admin routes with auth
   await fastify.register(adminAuthPlugin, { prefix: '/v1/admin' });
